@@ -25,9 +25,9 @@ class Board:
         direction = start_dir
 
         while self.in_bounds(position[0], position[1]) or position == start_pos:
-            direction = self.update_direction(direction)
-            #if not direction:
-                #raise AbsorbError
+            direction = self.update_direction(position, direction)
+            if not direction:
+                raise AbsorbError
             position = tuple([sum([p, d]) 
                 for p, d in zip(position, direction)])
             yield position
@@ -44,7 +44,7 @@ class Board:
     def in_bounds(self, p):
         pass
 
-    def update_direction(self, d):
+    def update_direction(self, p, d):
         pass
 
 class RectBoard(Board):
@@ -76,6 +76,20 @@ class RectBoard(Board):
         for i, n in enumerate(p):
             if n == -1 or n == self.size + 1:
                 return self.in_bounds(p[i-1])
+
+    def update_direction(self, p, d):
+        if d[0] != 1:
+            if (p[0] + d[0], p[1]) in self.atoms:
+                return None
+            elif (p[0] + d[0], p[1] + 1) in self.atoms:
+                return d
+            elif (p[0] + d[0], p[1] - 1) in self.atoms:
+                return d
+        return d   
+        
+
+class AbsorbError(Exception):
+    pass
  
 if __name__ == "__main__":
     board = RectBoard(size=8, natoms=4)
@@ -85,5 +99,8 @@ if __name__ == "__main__":
         try:
             print(next(step))
         except StopIteration:
-            print('Done')
+            print('Exited board.')
             break        
+        except AbsorbError:
+            print('Ray absorbed.')
+            break
