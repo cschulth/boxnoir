@@ -74,19 +74,12 @@ class RectBoard(Board):
 
     def valid_start_pos(self, p):
         for i, n in enumerate(p):
-            if n == -1 or n == self.size + 1:
+            if n == -1 or n == self.size:
                 return self.in_bounds(p[i-1])
+        return False
 
     def update_direction(self, p, d):
-        if d[0] != 1:
-            if (p[0] + d[0], p[1]) in self.atoms:
-                return None
-            elif (p[0] + d[0], p[1] + 1) in self.atoms:
-                return d
-            elif (p[0] + d[0], p[1] - 1) in self.atoms:
-                return d
-        return d   
-        
+       return d 
 
 class AbsorbError(Exception):
     pass
