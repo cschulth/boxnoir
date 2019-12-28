@@ -79,7 +79,19 @@ class RectBoard(Board):
         return False
 
     def update_direction(self, p, d):
-       return d 
+        return d
+
+    def step(self, start_dir=None, start_pos=None):
+        if not start_pos:
+            raise ValueError
+        if not start_dir:
+            start_dir = [0,0]
+            if start_pos[0] == -1: start_dir[0]=1
+            if start_pos[1] == -1: start_dir[1]=1
+            if start_pos[0] == self.size: start_dir[0]=-1
+            if start_pos[1] == self.size: start_dir[1]=-1
+        return super().step(tuple(start_dir), start_pos) 
+
 
 class AbsorbError(Exception):
     pass
