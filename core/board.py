@@ -24,12 +24,14 @@ class Board:
         position = start_pos
         direction = start_dir
 
-        while self.in_bounds(position[0], position[1]) or position == start_pos:
+        while True:
             direction = self.update_direction(position, direction)
             if not direction:
                 raise AbsorbError
             position = tuple([sum([p, d]) 
                 for p, d in zip(position, direction)])
+            if not self.in_bounds(position[0], position[1]):
+                break
             yield position
 
     def atom(self, natoms):
@@ -63,7 +65,7 @@ class RectBoard(Board):
         
     def in_bounds(self, *args):
         for arg in args:
-            if arg < 0 or arg >= self.size - 1:
+            if arg < 0 or arg >= self.size:
                 return False
         return True
 
