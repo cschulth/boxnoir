@@ -81,6 +81,8 @@ class RectBoard(Board):
         return False
 
     def update_direction(self, p, d):
+        if p == (4,4):
+            d = (d[1], d[0])
         return d
 
     def step(self, start_dir=None, start_pos=None):
