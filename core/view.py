@@ -14,8 +14,8 @@ class View():
 
     def draw(self, stdscr, atoms_visible=False):
         # Offsets for drawing tiled fields
-        fsy, fsx = (len(self.FIELD)-1,
-                len(self.FIELD[0])-1)
+        fsy, fsx = (len(View.FIELD)-1,
+                len(View.FIELD[0])-1)
         # Draw fields one by one
         for (y, x) in it.product(range(1,9), repeat=2):
             self.draw_field(stdscr, fsy*y, fsx*x)
@@ -31,8 +31,8 @@ class View():
         """
         labels = map(chr, it.cycle(range(65,91)))
         # Offsets for drawing tiled fields
-        fsy, fsx = (len(self.FIELD)-1,
-                len(self.FIELD[0])-1)
+        fsy, fsx = (len(View.FIELD)-1,
+                len(View.FIELD[0])-1)
         for start, end in self._game.probes:
             label = labels.__next__()
             y, x = start
@@ -45,7 +45,7 @@ class View():
 
     def draw_field(self, stdscr, y, x, label=None, background=True):
         if(background):
-            for y_offset, row in enumerate(self.FIELD):
+            for y_offset, row in enumerate(View.FIELD):
                 stdscr.addstr(y+y_offset, x, row)
         if label:
             stdscr.addnstr(y+1, x+1, label, 4)
