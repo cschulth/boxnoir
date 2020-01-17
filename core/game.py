@@ -16,9 +16,9 @@ class SquareGame():
     NUM_ATOMS=4
 
     def __init__(self):
-        #self._atoms = random.sample(list(
-        #    it.product(range(1,9), repeat=2)), NUM_ATOMS)
-        self.atoms = [(3, 5), (3, 6), (1, 6), (8, 3)]
+        self.atoms = random.sample(list(
+            it.product(range(1,9), repeat=2)), self.NUM_ATOMS)
+        #self.atoms = [(3, 5), (3, 6), (1, 6), (8, 3)]
         self.probes = []
 
     def is_valid(self, y, x):
