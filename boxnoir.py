@@ -11,12 +11,6 @@ def main(stdscr):
     the_game = SquareGame()
     the_view = View(the_game)
 
-    # the_game.probe(2,0)
-    # the_game.probe(3,0)
-    # the_game.probe(2,9)
-    # the_game.probe(4,0)
-    # the_game.probe(9,2)
-    # the_game.probe(9,4)
 
     solve_flag = False
     status_text = "Hello!"
