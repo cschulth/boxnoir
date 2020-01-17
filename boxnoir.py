@@ -12,6 +12,7 @@ def main(stdscr):
     the_game = SquareGame()
     the_view = View(the_game)
     solve_flag = False
+    hints_flag = False
     status_text = "Hello!"
 
     def prompt_key(stdscr, status_text, prompt_text):
@@ -25,7 +26,7 @@ def main(stdscr):
     while True:
         # Show board
         stdscr.erase()
-        the_view.draw(stdscr, solve_flag)
+        the_view.draw(stdscr, solve_flag, hints_flag)
         stdscr.refresh()
 
         # Handle inputs
@@ -44,12 +45,14 @@ def main(stdscr):
             solve_flag = not solve_flag
             status_text = "See solution: {}".format(solve_flag)
         elif cmd == "h":          # (h)elp command
+            hints_flag = not hints_flag
             status_text = "p = probe, s = toggle sol., " \
                 "q = quit, h = help, r = reset"
         elif cmd == "r":           # (r)eset command
             the_game = SquareGame()
             the_view = View(the_game)
             solve_flag = False
+            hints_flag = False
             status_text = "Reset done. Hello!"
         else:
             status_text = "Unknown commmand"
