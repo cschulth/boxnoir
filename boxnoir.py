@@ -8,12 +8,19 @@ from core.view import View
 
 def main(stdscr):
     curses.curs_set(0)
+
     the_game = SquareGame()
     the_view = View(the_game)
-
-
     solve_flag = False
     status_text = "Hello!"
+
+    def prompt_key(stdscr, status_text, prompt_text):
+        stdscr.move(21, 0)
+        stdscr.deleteln()
+        stdscr.deleteln()
+        stdscr.addstr(21, 0, status_text)
+        stdscr.addstr(22, 0, prompt_text)
+        return stdscr.getkey()
 
     while True:
         # Show board
@@ -35,19 +42,16 @@ def main(stdscr):
             status_text = "Done"
         elif cmd == "s":          # (s)olve command
             solve_flag = not solve_flag
-            status_text = "Done"
+            status_text = "See solution: {}".format(solve_flag)
         elif cmd == "h":          # (h)elp command
-            status_text = "p = probe, s = toggle solution, " \
-                "q = quit, h = help"
+            status_text = "p = probe, s = toggle sol., " \
+                "q = quit, h = help, r = reset"
+        elif cmd == "r":           # (r)eset command
+            the_game = SquareGame()
+            the_view = View(the_game)
+            solve_flag = False
+            status_text = "Reset done. Hello!"
         else:
             status_text = "Unknown commmand"
-
-def prompt_key(stdscr, status_text, prompt_text):
-    stdscr.move(21, 0)
-    stdscr.deleteln()
-    stdscr.deleteln()
-    stdscr.addstr(21, 0, status_text)
-    stdscr.addstr(22, 0, prompt_text)
-    return stdscr.getkey()
 
 curses.wrapper(main)
