@@ -6,6 +6,8 @@ class Direction():
 
     @staticmethod
     def is_valid_dir(y_dir, x_dir):
+        if y_dir == 0 and x_dir == 0:
+            return False
         return y_dir in [-1,0,1] and x_dir in [-1,0,1]
 
     @staticmethod

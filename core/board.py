@@ -119,65 +119,16 @@ if __name__ == "__main__":
             print('Ray absorbed.')
             break
 
-class SquareField():
-
-    # The "#" characters will not be printed
-    FIELD = ["┼────┼",
-             "│####│",
-             "┼────┼"]
-
-    def __init__(self):
-        self.data = ""
-        self.visible = True
-
-    def draw(self, stdscr, y, x, with_data=True):
-        for y_offset, row in enumerate(self.FIELD):
-            for x_offset, ch in enumerate(row):
-                if ch != "#":
-                    stdscr.addch(y+y_offset, x+x_offset, ch)
-        if self.visible:
-            stdscr.addnstr(y+1, x+1, self.data, 4)
-
-    def set_visible(self, val):
-        self.visible = val
-
-    @staticmethod
-    def get_tile_offsets():
-        return (len(SquareField.FIELD)-1,
-                len(SquareField.FIELD[0])-1)
-
 
 class SquareBoard():
 
-    SIZE=10
+    FIELD = ["┼────┼",
+             "│    │",
+             "┼────┼"]
 
-    def __init__(self):
-        r = range(self.SIZE)
-        self.data = [[SquareField() for _ in r] for _ in r]
-        self.inner = set()
-        self.border = set()
-        for y_offset, row in enumerate(self.data):
-            for x_offset, item in enumerate(row):
-                if y_offset in [0, self.SIZE-1] or \
-                   x_offset in [0, self.SIZE-1]:
-                    self.border.add(item)
-                else:
-                    self.inner.add(item)
+    def __init__(self, size):
+        r = range(size)
+        self.data = [["" for _ in r] for _ in r]
 
-    def is_valid(self, y, x):
-        if y<0 or y>=self.SIZE: return False
-        if x<0 or x>=self.SIZE: return False
-        return True
-
-    def is_border(self, y, x):
-        if y in [0, self.SIZE-1] or \
-           x in [0, self.SIZE-1]:
-            return True
-        return False
-
-    def draw(self, stdscr, y, x):
-        fsy, fsx = SquareField.get_tile_offsets()
-        for y_offset, row in enumerate(self.data):
-            for x_offset, item in enumerate(row):
-                self.data[y_offset][x_offset].\
-                    draw(stdscr, y+fsy*y_offset, x+fsx*x_offset)
+    def put(self, y, x, s):
+        self.data[y][x] = s

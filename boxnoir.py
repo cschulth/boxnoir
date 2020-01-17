@@ -1,59 +1,59 @@
 #!/usr/bin/env python3
 
+import re
 import curses
 
 from core.game import SquareGame
+from core.view import View
 
 def main(stdscr):
     curses.curs_set(0)
     the_game = SquareGame()
+    the_view = View(the_game)
 
-    y_out, x_out = the_game.trace(2,0,0,1)
-    l = the_game._labels.__next__()
-    the_game.set(2, 0, l + "in")
-    if y_out != None and x_out != None:
-        the_game.set(y_out, x_out, l + "out")
+    # the_game.probe(2,0)
+    # the_game.probe(3,0)
+    # the_game.probe(2,9)
+    # the_game.probe(4,0)
+    # the_game.probe(9,2)
+    # the_game.probe(9,4)
 
-    y_out, x_out = the_game.trace(3,0,0,1)
-    l = the_game._labels.__next__()
-    the_game.set(3, 0, l + "in")
-    if y_out != None and x_out != None:
-        the_game.set(y_out, x_out, l + "out")
-
-    y_out, x_out = the_game.trace(2,9,0,-1)
-    l = the_game._labels.__next__()
-    the_game.set(2, 9, l + "in")
-    if y_out != None and x_out != None:
-        the_game.set(y_out, x_out, l + "out")
-
-    y_out, x_out = the_game.trace(4,0,0,1)
-    l = the_game._labels.__next__()
-    the_game.set(4, 0, l + "in")
-    if y_out != None and x_out != None:
-        the_game.set(y_out, x_out, l + "out")
-
-    y_out, x_out = the_game.trace(9,2,-1,0)
-    l = the_game._labels.__next__()
-    the_game.set(9, 2, l + "in")
-    if y_out != None and x_out != None:
-        the_game.set(y_out, x_out, l + "out")
-
-    y_out, x_out = the_game.trace(9,4,-1,0)
-    l = the_game._labels.__next__()
-    the_game.set(9, 4, l + "in")
-    if y_out != None and x_out != None:
-        the_game.set(y_out, x_out, l + "out")
+    solve_flag = False
+    status_text = "Hello!"
 
     while True:
-        stdscr.clear()
-        the_game.draw(stdscr)
-        stdscr.addstr(22, 0, "Command? ")
+        # Show board
+        stdscr.erase()
+        the_view.draw(stdscr, solve_flag)
         stdscr.refresh()
 
-        curses.echo()
-        curses.curs_set(1)
-        cmd = stdscr.getstr()
-        curses.noecho()
-        curses.curs_set(0)
+        # Handle inputs
+        cmd = prompt_key(stdscr, status_text, "Command?")
+        if cmd == "q":            # (q)uit command
+            break
+        elif cmd == "p":          # (p)robe command
+            y = prompt_key(stdscr, "Probe", "Y?")
+            x = prompt_key(stdscr, "Probe", "X?")
+            try:
+                the_game.probe(int(y), int(x))
+            except Exception as e:
+                status_text = e.__str__()
+            status_text = "Done"
+        elif cmd == "s":          # (s)olve command
+            solve_flag = not solve_flag
+            status_text = "Done"
+        elif cmd == "h":          # (h)elp command
+            status_text = "p = probe, s = toggle solution, " \
+                "q = quit, h = help"
+        else:
+            status_text = "Unknown commmand"
+
+def prompt_key(stdscr, status_text, prompt_text):
+    stdscr.move(21, 0)
+    stdscr.deleteln()
+    stdscr.deleteln()
+    stdscr.addstr(21, 0, status_text)
+    stdscr.addstr(22, 0, prompt_text)
+    return stdscr.getkey()
 
 curses.wrapper(main)
